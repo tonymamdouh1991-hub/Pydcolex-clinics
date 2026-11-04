@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pydcolex Certified Clinics | Jalor Egypt</title>
+<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4F7F7;--ink:#12303A;--mut:#5B727A;--line:#D5E0E1;--surf:#fff;--acc:#0E6B66;--acc-ink:#fff;--wa:#128C4A;--wa-ink:#fff;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0C1A1F;--ink:#E6F0F0;--mut:#93AAB0;--line:#223A42;--surf:#112329;--acc:#4DC2B8;--acc-ink:#062B28;--wa:#2FBF71;--wa-ink:#04230F;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0C1A1F;--ink:#E6F0F0;--mut:#93AAB0;--line:#223A42;--surf:#112329;--acc:#4DC2B8;--acc-ink:#062B28;--wa:#2FBF71;--wa-ink:#04230F;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Readex Pro',system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;line-height:1.6;-webkit-text-size-adjust:100%}
+main{max-width:560px;margin:0 auto;padding:20px 20px 48px}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+.brand{font-weight:600;letter-spacing:.02em}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.lang{background:none;border:1px solid var(--line);border-radius:999px;padding:4px 14px;font-size:.875rem}
+h1{font-size:clamp(1.7rem,7vw,2.4rem);line-height:1.2;font-weight:600;margin:0 0 12px}
+.sub{color:var(--mut);margin:0 0 28px;max-width:46ch}
+.lbl{font-size:.875rem;color:var(--mut);margin:0 0 8px}
+.cities{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-bottom:24px}
+.city{padding:14px 8px;border:1px solid var(--line);background:var(--surf);border-radius:12px;font-weight:600}
+.city[aria-selected="true"]{background:var(--acc);color:var(--acc-ink);border-color:var(--acc)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px}
+.chip{padding:6px 14px;border:1px solid var(--line);border-radius:999px;background:transparent;font-size:.875rem}
+.chip[aria-pressed="true"]{border-color:var(--acc);box-shadow:inset 0 0 0 1px var(--acc);font-weight:600}
+ul{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+li{padding:20px 0;border-bottom:1px solid var(--line)}
+.name{font-weight:600;font-size:1.125rem}
+.meta{color:var(--mut);font-size:.9rem}
+.ok{display:inline-flex;align-items:center;gap:6px;color:var(--acc);font-size:.8rem;margin:6px 0 14px}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}.wa{display:flex;justify-content:center;align-items:center;text-align:center;background:var(--acc);color:var(--acc-ink);text-decoration:none;font-weight:600;padding:13px 10px;border-radius:12px}.mp{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.info{margin-top:32px;color:var(--mut);font-size:.875rem}
+.info p{margin:0 0 10px;max-width:60ch}
+</style>
+</head>
+<body>
+<main>
+<header><span class="brand">Jalor Egypt</span><button class="lang" id="lang" type="button"></button></header>
+<h1 id="t"></h1>
+<p class="sub" id="s"></p>
+<p class="lbl" id="cl"></p>
+<div class="cities" id="cities" role="tablist"></div>
+<ul id="list"></ul>
+<div class="info" id="info"></div>
+</main>
+<script>
+// EDIT HERE: replace sample clinics with real partner clinics (ig = Instagram username without @; maps = optional Google Maps link of the clinic)
+var CLINICS=[
+{city:'cairo',name:'Nabd Clinics Aesthetics',doc:'',area:{en:'Masr El Gedida',ar:'مصر الجديدة'},maps:'https://share.google/iqnG2g3qAEMWjsN54',ig:'nabd_clinics_aesthetics'},
+{city:'cairo',name:'Nabd Clinics Aesthetics',doc:'',area:{en:'5th Settlement',ar:'التجمع الخامس'},maps:'https://share.google/NZRmrDbr8GM32gXdd',ig:'nabd_clinics_aesthetics'},
+{city:'giza',name:'Nabd Clinics Aesthetics',doc:'',area:{en:'Sheikh Zayed',ar:'الشيخ زايد'},maps:'https://share.google/w7ZBgZs0ooTgWnHSJ',ig:'nabd_clinics_aesthetics'},
+{city:'giza',name:'Nabd Clinics Aesthetics',doc:'',area:{en:'Mohandseen',ar:'المهندسين'},maps:'https://share.google/aY1eP9ginAp75WF10',ig:'nabd_clinics_aesthetics'},
+{city:'tanta',name:'Nabd Clinics Aesthetics',doc:'',area:{en:'',ar:''},maps:'https://share.google/i5UNneGafomYV7eHB',ig:'nabd_clinics_aesthetics'},
+{city:'cairo',name:'elittine',doc:'',area:{en:'',ar:''},maps:'https://share.google/C9suEckzseYhgRFtV',ig:'elittine'},
+{city:'giza',name:'elittine',doc:'',area:{en:'',ar:''},maps:'https://share.google/I58w9iAFUQhdxMS1K',ig:'elittine'},
+{city:'cairo',name:'schonaestheticeg',doc:'',area:{en:'5th Settlement',ar:'التجمع الخامس'},maps:'https://share.google/3IO2uEjuWF4zhumod',ig:'schonaestheticeg'},
+{city:'giza',name:'schonaestheticeg',doc:'',area:{en:'Sheikh Zayed',ar:'الشيخ زايد'},maps:'https://share.google/Uu9bAJglBjH1M3ETv',ig:'schonaestheticeg'},
+{city:'cairo',name:'clarisskinwellnessofficial',doc:'',area:{en:'5th Settlement',ar:'التجمع الخامس'},maps:'https://share.google/JE0GjADGJIyR5pBEh',ig:'clarisskinwellnessofficial'}
+];
+var CITIES=[{id:'cairo',en:'Cairo',ar:'القاهرة'},{id:'giza',en:'Giza',ar:'الجيزة'},{id:'alex',en:'Alexandria',ar:'الإسكندرية'},{id:'tanta',en:'Tanta',ar:'طنطا'}];
+var CONCERNS=[{id:'dull',en:'Dull skin',ar:'بشرة باهتة'},{id:'lines',en:'Fine lines',ar:'خطوط دقيقة'},{id:'scars',en:'Acne scars',ar:'آثار حب الشباب'},{id:'pigment',en:'Pigmentation',ar:'تصبغات'},{id:'unsure',en:'Not sure',ar:'لست متأكدًا'}];
+var TX={
+en:{t:'Pydcolex Certified Clinics',s:'Pick your city, then open the clinic’s location or Instagram profile.',cl:'City',map:'Open in Maps',btn:'Instagram profile',ok:'Verified Jalor partner',empty:'No clinics listed in this city yet.',lang:'العربية',
+ info:['Treatment is performed by a licensed doctor. Results vary from person to person.','We don’t store your details here. The buttons open Google Maps or the doctor’s Instagram profile.'],
+ msg:function(c,u){return 'Hello, I’m interested in a Pydcolex session.'+(c?' Concern: '+c+'.':'')+' Source: Jalor Egypt ('+u+')'}},
+ar:{t:'عيادات بيدكولكس المعتمدة',s:'اختر مدينتك، ثم افتح موقع العيادة أو حسابها على إنستغرام.',cl:'المدينة',map:'افتح الموقع',btn:'حساب إنستغرام',ok:'شريك معتمد من جالور',empty:'لا توجد عيادات في هذه المدينة حاليًا.',lang:'English',
+ info:['يتم العلاج بواسطة طبيب مرخّص. تختلف النتائج من شخص لآخر.','لا نحفظ بياناتك هنا. الأزرار تفتح خرائط جوجل أو حساب الطبيب على إنستغرام.'],
+ msg:function(c,u){return 'مرحبًا، أرغب في معرفة المزيد عن جلسات بيدكولكس.'+(c?' الاهتمام: '+c+'.':'')+' المصدر: جالور مصر ('+u+')'}}
+};
+var P=new URLSearchParams(location.search);
+var st={lang:P.get('lang')==='ar'?'ar':'en',city:P.get('city')||'cairo',concern:P.get('concern')||''};
+if(!AV().some(function(c){return c.id===st.city}))st.city=AV()[0].id;
+var src=(P.get('utm')||'instagram').replace(/[^a-z0-9_-]/gi,'').slice(0,40)||'instagram';
+function $(i){return document.getElementById(i)}
+function AV(){return CITIES.filter(function(c){return CLINICS.some(function(k){return k.city===c.id})})}
+function render(){
+ var L=st.lang,X=TX[L];
+ document.documentElement.lang=L;document.documentElement.dir=L==='ar'?'rtl':'ltr';
+ $('t').textContent=X.t;$('s').textContent=X.s;$('cl').textContent=X.cl;$('lang').textContent=X.lang;
+ $('cities').innerHTML=AV().map(function(c){return '<button type="button" role="tab" class="city" data-city="'+c.id+'" aria-selected="'+(c.id===st.city)+'">'+c[L]+'</button>'}).join('');
+ var items=CLINICS.filter(function(c){return c.city===st.city});
+ $('list').innerHTML=items.length?items.map(function(c){
+  var href='https://instagram.com/'+encodeURIComponent(c.ig);var cn=CITIES.filter(function(x){return x.id===c.city})[0].en;var mh=c.maps||('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent([c.name,c.area.en,cn,'Egypt'].filter(Boolean).join(', ')));
+  return '<li><div class="name">'+c.name+(c.doc?' — '+c.doc:'')+'</div>'+(c.area[L]?'<div class="meta">'+c.area[L]+'</div>':'')+
+  '<div class="ok"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'+X.ok+'</div>'+
+  '<div class="btns"><a class="wa mp" href="'+mh+'" target="_blank" rel="noopener">'+X.map+'</a><a class="wa" href="'+href+'" target="_blank" rel="noopener">'+X.btn+'</a></div></li>'}).join(''):'<li class="meta">'+X.empty+'</li>';
+ $('info').innerHTML=X.info.map(function(p){return '<p>'+p+'</p>'}).join('');
+}
+$('cities').addEventListener('click',function(e){var b=e.target.closest('[data-city]');if(b){st.city=b.dataset.city;render()}});
+$('lang').addEventListener('click',function(){st.lang=st.lang==='en'?'ar':'en';render()});
+render();
+</script>
+</body>
+</html>
